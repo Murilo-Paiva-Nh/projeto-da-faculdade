@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Assistente de Estudos Inteligente</title>
+    <style>
+        :root {
+            --primary: #2563eb;
+            --secondary: #1e40af;
+            --bg: #f3f4f6;
+            --card: #ffffff;
+            --text: #1f2937;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            min-height: 100vh;
+        }
+
+        .container {
+            background-color: var(--card);
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            max-width: 600px;
+            width: 100%;
+        }
+
+        h1 {
+            color: var(--primary);
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+
+        p.description {
+            text-align: center;
+            color: #666;
+            margin-bottom: 2rem;
+            font-size: 0.95rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.2rem;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            font-size: 1rem;
+            box-sizing: border-box; /* Garante que padding não quebre o layout */
+        }
+
+        input:focus {
+            outline: none;
+            border-color: var(--primary);
+            ring: 2px solid var(--primary);
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: background 0.3s;
+            margin-top: 1rem;
+        }
+
+        button:hover {
+            background-color: var(--secondary);
+        }
+
+        #results {
+            margin-top: 2rem;
+            display: none; /* Escondido inicialmente */
+            border-top: 2px solid #e5e7eb;
+            padding-top: 1.5rem;
+        }
+
+        .result-category {
+            margin-bottom: 1.5rem;
+        }
+
+        .result-category h3 {
+            font-size: 1.1rem;
+            margin-bottom: 0.8rem;
+            color: #4b5563;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .link-card {
+            display: block;
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            padding: 12px;
+            margin-bottom: 8px;
+            border-radius: 6px;
+            text-decoration: none;
+            color: var(--primary);
+            font-weight: 500;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .link-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            background: #fff;
+        }
+
+        .tag {
+            font-size: 0.8rem;
+            background: #e0e7ff;
+            color: #3730a3;
+            padding: 2px 6px;
+            border-radius: 4px;
+            margin-left: auto;
+            float: right;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>🔍 Planejador de Estudos</h1>
+        <p class="description">Responda as 5 perguntas abaixo para gerarmos links de busca precisos e seguros para o seu aprendizado.</p>
+
+        <form id="studyForm">
+            <div class="form-group">
+                <label for="topic">1. Qual é o assunto principal que deseja estudar?</label>
+                <input type="text" id="topic" placeholder="Ex: História da Arte, Python, Marketing..." required>
+            </div>
+
+            <div class="form-group">
+                <label for="subtopic">2. Existe algum foco específico?</label>
+                <input type="text" id="subtopic" placeholder="Ex: Renascimento, Automação, Redes Sociais...">
+            </div>
+
+            <div class="form-group">
+                <label for="level">3. Qual seu nível de conhecimento atual?</label>
+                <select id="level">
+                    <option value="iniciante">Iniciante (Básico)</option>
+                    <option value="intermediário">Intermediário</option>
+                    <option value="avançado">Avançado (Técnico)</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="format">4. Você prefere aulas teóricas ou práticas?</label>
+                <select id="format">
+                    <option value="conceitos teóricos">Teoria e Conceitos</option>
+                    <option value="tutorial prático passo a passo">Prática e Tutoriais</option>
+                    <option value="estudo de caso">Estudos de Caso</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="extra">5. Alguma palavra-chave extra? (Opcional)</label>
+                <input type="text" id="extra" placeholder="Ex: PDF, Curso Completo, 2024...">
+            </div>
+
+            <button type="submit">Gerar Conteúdo de Estudo</button>
+        </form>
+
+        <div id="results">
+            <h2>📚 Seus Materiais Selecionados</h2>
+            <p style="font-size: 0.9rem; color: #dc2626; margin-bottom: 15px;">Nota: Estes links abrem pesquisas filtradas para garantir que o conteúdo exista.</p>
+
+            <div class="result-category">
+                <h3>🎥 3 Vídeos Recomendados (YouTube)</h3>
+                <a id="yt1" href="#" target="_blank" class="link-card">Carregando... <span class="tag">Aula Geral</span></a>
+                <a id="yt2" href="#" target="_blank" class="link-card">Carregando... <span class="tag">Foco Específico</span></a>
+                <a id="yt3" href="#" target="_blank" class="link-card">Carregando... <span class="tag">Playlist/Curso</span></a>
+            </div>
+
+            <div class="result-category">
+                <h3>📖 2 Fontes de Leitura (Livros/Artigos)</h3>
+                <a id="bk1" href="#" target="_blank" class="link-card">Carregando... <span class="tag">Google Books (Gratuitos)</span></a>
+                <a id="bk2" href="#" target="_blank" class="link-card">Carregando... <span class="tag">Internet Archive (Acervo)</span></a>
+            </div>
+
+            <div class="result-category">
+                <h3>📰 1 Reportagem ou Notícia</h3>
+                <a id="news1" href="#" target="_blank" class="link-card">Carregando... <span class="tag">Google News</span></a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('studyForm').addEventListener('submit', function(e) {
+            e.preventDefault(); // Impede o recarregamento da página
+
+            // 1. Capturar os dados
+            const topic = document.getElementById('topic').value;
+            const subtopic = document.getElementById('subtopic').value;
+            const level = document.getElementById('level').value;
+            const format = document.getElementById('format').value;
+            const extra = document.getElementById('extra').value;
+
+            // 2. Construir termos de busca (Encoding garante que espaços e acentos funcionem na URL)
+            // Termo base forte
+            const baseQuery = `${topic} ${subtopic}`;
+            
+            // 3. Gerar Links para o YouTube
+            // Link 1: Focado em aula introdutória ou base
+            const ytQuery1 = encodeURIComponent(`${baseQuery} aula ${level}`);
+            document.getElementById('yt1').href = `https://www.youtube.com/results?search_query=${ytQuery1}`;
+            document.getElementById('yt1').innerHTML = `Buscar no YouTube: <strong>${topic} - Aula ${level}</strong> <span class="tag">Aula</span>`;
+
+            // Link 2: Focado no formato (teoria ou prática)
+            const ytQuery2 = encodeURIComponent(`${baseQuery} ${format}`);
+            document.getElementById('yt2').href = `https://www.youtube.com/results?search_query=${ytQuery2}`;
+            document.getElementById('yt2').innerHTML = `Buscar no YouTube: <strong>${topic} - ${format}</strong> <span class="tag">Prática/Teoria</span>`;
+
+            // Link 3: Tenta achar playlist ou curso completo
+            const ytQuery3 = encodeURIComponent(`Curso completo ${baseQuery} ${extra}`);
+            document.getElementById('yt3').href = `https://www.youtube.com/results?search_query=${ytQuery3}&sp=EgIQAw%253D%253D`; // O parâmetro sp filtra playlists
+            document.getElementById('yt3').innerHTML = `Buscar Playlists: <strong>Curso de ${topic}</strong> <span class="tag">Playlists</span>`;
+
+            // 4. Gerar Links para Livros (Filtros de gratuidade)
+            // Google Books com filtro de "Visualização Completa" ou "Ebook Gratuito"
+            const bookQuery1 = encodeURIComponent(`${topic} ${subtopic}`);
+            // tbs=bkv:f (Free Google Ebooks filter)
+            document.getElementById('bk1').href = `https://www.google.com.br/search?tbm=bks&tbs=bkv:f&q=${bookQuery1}`;
+            document.getElementById('bk1').innerHTML = `Google Books: <strong>Livros Gratuitos de ${topic}</strong> <span class="tag">PDF/Ebook</span>`;
+
+            // Internet Archive (Biblioteca aberta)
+            const bookQuery2 = encodeURIComponent(`${topic}`);
+            document.getElementById('bk2').href = `https://archive.org/search.php?query=${bookQuery2}&sin=TXT`;
+            document.getElementById('bk2').innerHTML = `Internet Archive: <strong>Acervo sobre ${topic}</strong> <span class="tag">Acervo Público</span>`;
+
+            // 5. Gerar Link para Reportagem
+            // Google News
+            const newsQuery = encodeURIComponent(`${topic} ${subtopic} novidades tendências`);
+            document.getElementById('news1').href = `https://news.google.com/search?q=${newsQuery}&hl=pt-BR&gl=BR&ceid=BR:pt-419`;
+            document.getElementById('news1').innerHTML = `Google News: <strong>Últimas notícias sobre ${topic}</strong> <span class="tag">Notícias</span>`;
+
+            // Mostrar resultados
+            document.getElementById('results').style.display = 'block';
+            
+            // Scroll suave até os resultados
+            document.getElementById('results').scrollIntoView({ behavior: 'smooth' });
+        });
+    </script>
+</body>
+</html>
